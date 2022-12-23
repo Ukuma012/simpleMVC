@@ -15,8 +15,7 @@ require_once(__DIR__ . '/controller/Test.php');
     function main(){
         // localhost/Appname/index.php/ControllerName/functionName/args.../args../moreargs/
         // http://localhost:8082/simplemvc/index.php/Test/hello
-        // TODO: if there is no such directory, show 404 page
-
+        
         $uri = parse_url($_SERVER['REQUEST_URI']);
 
         // Converting url to array
@@ -41,8 +40,11 @@ require_once(__DIR__ . '/controller/Test.php');
             for(;$start<count($parameters);$start++){
                 array_push($args, $parameters[$start]);
             }
-
-            call_user_func_array(array(new $controller_name, $function_name), $args);
+            if(file_exists('./controller/' . $controller_name . '.php')) {
+                call_user_func_array(array(new $controller_name, $function_name), $args);
+            } else {
+                echo "Controller not found";
+            }
 
         } else {
         
